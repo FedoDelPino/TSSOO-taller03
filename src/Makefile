@@ -2,14 +2,13 @@ CC=gcc
 CXX=g++
 RM=rm -f
 
-TARGET=../example
+TARGET=../sumArray
 
-
-INCLUDES=-I../include -I. -I./include
+INCLUDES=-I./include 
 LDFLAGS=
-LDLIBS=-lpthread
+LDLIBS=-lpthread -fopenmp
 
-CXXFLAGS=-std=c++14 -Wall -O2 
+CXXFLAGS=-std=c++17 -Wall -O2 -fopenmp
 
 DIR_OBJ=objs
 

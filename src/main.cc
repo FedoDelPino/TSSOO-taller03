@@ -4,12 +4,15 @@
 uint64_t* ArregloComun = nullptr;
 uint64_t* ArregloSerial = nullptr;
 uint64_t* ArregloParalelo = nullptr;
+uint64_t* ArregloOpenMPSerial= nullptr;
+uint64_t* ArregloOpenMPParalelo = nullptr;
+uint64_t SumaOpenParalelo= 0;
 uint64_t SumaParalelo = 0;
 std::vector<std::thread *> threads;
 std::vector<std::thread *> threadsSumas;
 std::mutex Candado;
 
-void LLenadoArreglo(size_t Left, size_t Right, size_t RandType){
+void LLenadoArreglo(size_t Left, size_t Right, size_t RandType, uint64_t numThreads){
 	for(size_t i = Left; i < Right; ++i){		
 		// Arreglo[i] = unif(rng);
 		switch(RandType){
@@ -21,6 +24,9 @@ void LLenadoArreglo(size_t Left, size_t Right, size_t RandType){
 				ArregloParalelo[i] = ArregloComun[i];
 //				std::cout << "Elemento del Arreglo: Paralelo"<< ArregloParalelo[i] << std::endl;
 				break;
+			// case 2:
+			// 	ArregloOpenMPParalelo[i] = ArregloComun[i];
+			// 	break;
 		}
 	}
 }
@@ -59,21 +65,34 @@ int main(int argc, char** argv){
 	std::uniform_int_distribution<uint32_t> unif(LInferior, LSuperior);
 	for(uint64_t i = 0; i < totalElementos; i++){
 		ArregloComun[i] = unif(rng);
-		// std::cout << "Arreglo comun" << ArregloComun[i] << std::endl;
+		// std::cout << "Arreglo comun" << ArregloComun[i] << std::endl;	
 	}
 
 	//======Llenado En Serie======
 	ArregloSerial = new uint64_t[totalElementos];
 	auto start = std::chrono::high_resolution_clock::now();
-	LLenadoArreglo(0,totalElementos,0);
+	LLenadoArreglo(0,totalElementos,0,numThreads);
 	auto end     = std::chrono::high_resolution_clock::now(); 
 	auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 	auto totalTimeS = elapsed.count();
 
+	
+	//======Llenado en paralelo con openMP======
+	ArregloOpenMPParalelo = new uint64_t[totalElementos];
+	start = std::chrono::high_resolution_clock::now();
+	#pragma omp parallel for num_threads(numThreads)
+	for(size_t i=0; i<totalElementos; i++){
+		ArregloOpenMPParalelo[i] = ArregloComun[i];
+		std::cout << "ArregloOMP : " << ArregloOpenMPParalelo[i] << std::endl;
+	}
+	end     = std::chrono::high_resolution_clock::now(); 
+	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	auto totalTimeOMP = elapsed.count();
+
 	//======Llenado En Paralelo======
 	ArregloParalelo = new uint64_t[totalElementos];
 	for (size_t i= 0; i < numThreads ; i++){
-		threads.push_back(new std::thread(LLenadoArreglo, i*(totalElementos)/numThreads, (i+1)*(totalElementos)/numThreads,1));
+		threads.push_back(new std::thread(LLenadoArreglo, i*(totalElementos)/numThreads, (i+1)*(totalElementos)/numThreads,1, numThreads));
 	}
 	start = std::chrono::high_resolution_clock::now();
 	for(auto &thLlenado : threads){
@@ -95,8 +114,8 @@ int main(int argc, char** argv){
 	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 	auto totalTimeSumaS = elapsed.count();
 	std::cout <<"Suma En Serie: " <<SumaSerial << std::endl;	
+
 	//======Sumado En Paralelo======
-	//SumaParalelo = new uint64_t[totalElementos];
 	for (size_t i=0;i<numThreads;i++){
 		threadsSumas.push_back(new std::thread(SumadoParalelo, i*(totalElementos)/numThreads,(i+1)*(totalElementos)/numThreads));
 	}
@@ -107,14 +126,27 @@ int main(int argc, char** argv){
 	end     = std::chrono::high_resolution_clock::now(); 
 	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 	auto totalTimeSumaP = elapsed.count();
+
+	//======Sumado en Paralelo con OpenMP======
+	uint64_t sumaOMP = 0;
+	#pragma omp parallel for reduction(+:sumaOMP) num_threads(numThreads)
+	for(size_t i = 0; i < totalElementos ; ++i){
+		sumaOMP = ArregloOpenMPParalelo[i];
+	}
+	
+	//================Consolidacion de resultados================
 	std::cout << "Suma Total en Paralelo: " << SumaParalelo << "\n" << std::endl;
+	std::cout << "Suma Total en Paralelo con OMP: " << sumaOMP << "\n" << std::endl;
 	std::cout << "==========Tiempos de Llenado==========" << std::endl;
 	std::cout << "TiempoSerial :"  << totalTimeS << "[ms]" << std::endl;
 	std::cout << "TiempoParalelo:"  << totalTimeP << "[ms]" << std::endl;
+	std::cout << "TiempoParalelo con OMP:"  << totalTimeOMP << "[ms]" << std::endl;
 	std::cout << "Desempeño entre S y P = " << (double)totalTimeS/totalTimeP << "\n" <<std::endl;
+	std::cout << "Desempeño entre S y OMP = " <<  (double)totalTimeS/totalTimeOMP << "\n" << std::endl; 
 	std::cout << "==========Tiempos de Sumado==========" << std::endl;
 	std::cout << "TiempoSerial :"  << totalTimeSumaS << "[ms]" << std::endl;
 	std::cout << "TiempoParalelo:"  << totalTimeSumaP << "[ms]" << std::endl;
+	// std::cout << "TiempoParalelo con OMP" << totalTimeSumaOMP << "[ms]" << std::endl;
 	std::cout << "Desempeño entre S y P = " << (double)totalTimeSumaS/totalTimeSumaP <<std::endl;
 	return(EXIT_SUCCESS);
 }
