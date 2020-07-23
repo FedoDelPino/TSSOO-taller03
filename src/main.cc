@@ -83,29 +83,6 @@ int main(int argc, char** argv){
 	auto totalTimeP = elapsed.count();
 	
 
-	//======Llenado en Serie con openMP======
-	ArregloOpenMPSerial = new uint64_t[totalElementos];
-	start = std::chrono::high_resolution_clock::now();
-	#pragma omp parallel for num_threads(1)
-	for(size_t i=0; i<totalElementos; i++){
-		ArregloOpenMPSerial[i] = ArregloComun[i];
-	}
-	end     = std::chrono::high_resolution_clock::now(); 
-	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-	auto totalTimeOMPSerial = elapsed.count();
-		
-	//======Llenado en paralelo con openMP======
-	ArregloOpenMPParalelo = new uint64_t[totalElementos];
-	start = std::chrono::high_resolution_clock::now();
-	#pragma omp parallel for num_threads(numThreads)
-	for(size_t i=0; i<totalElementos; i++){
-		ArregloOpenMPParalelo[i] = ArregloComun[i];
-	}
-	end     = std::chrono::high_resolution_clock::now(); 
-	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
-	auto totalTimeOMPParalelo = elapsed.count();
-
-
 	//================Modulo Sumado================
 
 	//======Sumado En Serie======
@@ -129,6 +106,28 @@ int main(int argc, char** argv){
 	end     = std::chrono::high_resolution_clock::now(); 
 	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 	auto totalTimeSumaP = elapsed.count();
+
+	//======Llenado en Serie con openMP======
+	ArregloOpenMPSerial = new uint64_t[totalElementos];
+	start = std::chrono::high_resolution_clock::now();
+	#pragma omp parallel for num_threads(1)
+	for(size_t i=0; i<totalElementos; i++){
+		ArregloOpenMPSerial[i] = ArregloComun[i];
+	}
+	end     = std::chrono::high_resolution_clock::now(); 
+	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	auto totalTimeOMPSerial = elapsed.count();
+		
+	//======Llenado en paralelo con openMP======
+	ArregloOpenMPParalelo = new uint64_t[totalElementos];
+	start = std::chrono::high_resolution_clock::now();
+	#pragma omp parallel for num_threads(numThreads)
+	for(size_t i=0; i<totalElementos; i++){
+		ArregloOpenMPParalelo[i] = ArregloComun[i];
+	}
+	end     = std::chrono::high_resolution_clock::now(); 
+	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
+	auto totalTimeOMPParalelo = elapsed.count();
 
 	//======Sumado en Serial con OpenMP======
 	uint64_t sumaSerialOMP = 0;
