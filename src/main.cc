@@ -169,14 +169,13 @@ int main(int argc, char** argv){
 
 	std::cout << "==========Resumen de Desempeños==========" << std::endl;
 	std::cout << "======Desempeño Llenado sin OMP======"<< std::endl;
-	std::cout << "Entre Serial y Paralelo =        " << (double)totalTimeS/totalTimeP <<std::endl;
+	std::cout << "Llenado Entre Serial y Paralelo =        " << (double)totalTimeS/totalTimeP <<std::endl;
 	std::cout << "======Desempeño Sumado sin OMP======"<< std::endl;
-	std::cout << "Entre Serial y Paralelo =        " << (double)totalTimeSumaS/totalTimeSumaP << "\n" <<std::endl;
+	std::cout << "Sumado Entre Serial y Paralelo =        " << (double)totalTimeSumaS/totalTimeSumaP << "\n" <<std::endl;
 
-	std::cout << "======Desempeño Llenado con OMP======"<< std::endl;
-	std::cout << "OMP Entre Serial y Paralelo =    " << (double)totalTimeOMPSerial/totalTimeOMPParalelo <<std::endl;
-	std::cout << "======Desempeño Sumado con OMP======"<< std::endl;
-	std::cout << "OMP Entre Serial y Paralelo =    " << (double)totalTimeSSumaOMP/totalTimePSumaOMP << "\n" <<std::endl;
+	std::cout << "======Desempeño con OMP======"<< std::endl;
+	std::cout << "OMP LLenado Entre Serial y Paralelo =    " << (double)totalTimeOMPSerial/totalTimeOMPParalelo <<std::endl;
+	std::cout << "OMP Sumado Entre Serial y Paralelo =     " << (double)totalTimeSSumaOMP/totalTimePSumaOMP << "\n" <<std::endl;
 
 	std::cout << "======Desempeño de metodos======"<< std::endl;
 	std::cout << "Llenado Solo Serial y OMP Serial =         " << (double)totalTimeS/totalTimeOMPSerial <<std::endl;
