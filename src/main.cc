@@ -111,8 +111,10 @@ int main(int argc, char** argv){
 	ArregloOpenMPSerial = new uint64_t[totalElementos];
 	start = std::chrono::high_resolution_clock::now();
 	#pragma omp parallel for num_threads(1)
+	{
 	for(size_t i=0; i<totalElementos; i++){
 		ArregloOpenMPSerial[i] = ArregloComun[i];
+	}
 	}
 	end     = std::chrono::high_resolution_clock::now(); 
 	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
@@ -122,8 +124,10 @@ int main(int argc, char** argv){
 	ArregloOpenMPParalelo = new uint64_t[totalElementos];
 	start = std::chrono::high_resolution_clock::now();
 	#pragma omp parallel for num_threads(numThreads)
+	{
 	for(size_t i=0; i<totalElementos; i++){
 		ArregloOpenMPParalelo[i] = ArregloComun[i];
+	}
 	}
 	end     = std::chrono::high_resolution_clock::now(); 
 	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
@@ -133,8 +137,10 @@ int main(int argc, char** argv){
 	uint64_t sumaSerialOMP = 0;
 	start     = std::chrono::high_resolution_clock::now();
 	#pragma omp parallel for reduction(+:sumaSerialOMP) num_threads(1)
+	{
 	for(size_t i = 0; i < totalElementos ; ++i){
 		sumaSerialOMP += ArregloOpenMPParalelo[i];
+	}
 	}
 	end     = std::chrono::high_resolution_clock::now(); 
 	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
@@ -143,8 +149,10 @@ int main(int argc, char** argv){
 	uint64_t sumaParaleloOMP = 0;
 	start     = std::chrono::high_resolution_clock::now();
 	#pragma omp parallel for reduction(+:sumaParaleloOMP) num_threads(numThreads)
+	{
 	for(size_t i = 0; i < totalElementos ; ++i){
 		sumaParaleloOMP += ArregloOpenMPParalelo[i];
+	}
 	}
 	end     = std::chrono::high_resolution_clock::now(); 
 	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
