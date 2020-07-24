@@ -23,9 +23,9 @@ private:
 	
 	typedef struct args_t{
 		uint64_t TamProblema;
-		uint64_t numThreads;
-		uint64_t LInferior;
-		uint64_t LSuperior;
+		uint32_t numThreads;
+		uint32_t LInferior;
+		uint32_t LSuperior;
 	} args_t;
 	
 	// 2) Modificar constructor
