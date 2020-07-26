@@ -8,7 +8,7 @@ INCLUDES=-I./include
 LDFLAGS=
 LDLIBS=-lpthread -fopenmp
 
-CXXFLAGS=-std=c++17 -Wall -O2 -fopenmp
+CXXFLAGS=-std=c++17 -Wall -O1 -fopenmp
 
 DIR_OBJ=objs
 
