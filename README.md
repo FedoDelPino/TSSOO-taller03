@@ -65,14 +65,13 @@ Para mantener la consistencia de los datos a la hora de realizar el sumado de la
  
 Todo este programa está basado en su implementación dentro de una máquina virtual con sistema operativo basado en Linux, es muy posible que ciertas características no sean del todo correctas para otros sistemas operativos y ciertas funcionalidades del programa no sean eficazmente logradas dependiendo de las especificaciones de cada máquina virtual donde se ejecute este programa.
  
-Como observación, no se buscó implementar el mejor desempeño para la utilización de hilos, pero se entendía que algunas estructuras pudieron escribirse de distinta manera quizás mejor implementadas como el apartado de la suma pudo ser mucho más conveniente la utilización de un vector que guardará los datos para luego consolidar los datos de otra manera, lo que sería mucho más óptimo, correspondientemente claro, a un mejor manejo de los hilos y arreglos.
+En base a los diseños planteados, se comprendió que estos eran lo suficientemente completos como para realizar todo el proceso de codificación, aunque si bien es cierto, el taller anterior jugó un papel importante a la hora de la comparación e implementación de resultados esperados. El proceso de entendimiento de los resultados y análisis de estos fue un tanto complejo, debido a que se presentaron varias trabas a la hora de implementar la solución correcta, con respecto a cómo se deben comportar los hilos en llenado y suma de elementos de un arreglo. Aparte de esto factores como el tiempo, tanto para la toma de resultados, como también los tiempos de desarrollo fueron un tanto extensos, sobre todo por la recopilación de los resultados, debido a las limitaciones que presentaba el procesamiento de las tareas en la máquina virtual. Como síntesis de todo, se realizó un proceso de desarrollo, con respecto a un programa que manejara hilos, mediante una previa implementación (mejorando algunos aspectos en esta entrega) y una implementación que usará OpenMP, para la creación y recopilación de las tareas que realizaba cada Thread, donde se concluye que este proceso se realizó, aunque no de la manera esperada, satisfactoriamente obteniendo gran parte de los resultados esperados con respecto al comportamiento y manejo de hilos, donde el detalle principal viene dado por parte del módulo de sumado, debido a que los tiempos de suma de cada arreglo tomaron mucho más tiempo para la implementación pasada, en contraste con la implementación de OpenMP, dejándonos en claro que este proceso puede ser mucho mejor implementado, para corresponder con los resultados de optimización de tareas esperados por parte del uso de Threads. Para futuros estudios personales se retomará este mismo problema con el afán de resolver las problemáticas referidas a los tiempos de resultados en el módulo de sumado, en vista y propósito de mejorar su implementación dejando de lado el uso de Mutex. Sin más que decir, se concluye este reporte de actividad.
  
 Se puede apreciar que el cumplimiento del taller no abarcó por completo ciertos aspectos:
  
 ```diff
-- Optimización de los tiempos de llenado por parte de los hilos con OpenMP
+- Optimización de los tiempos de sumado por parte de la implementacion previa con Threads (taller previo)
 - Cierto entendimiento de estructuras de vectores para el mejor manejo de los hilos (taller previo)
-- Lograr un mayor desempeño en el módulo de llenado
 ```
  
 Aunque también es cierto que el proceso de aprendizaje fue logrado para la completación de los siguientes aspectos:
@@ -80,6 +79,7 @@ Aunque también es cierto que el proceso de aprendizaje fue logrado para la comp
 ```diff
 + Implementación del módulo 1
 + Implementación del módulo 2
++ Mejor Entendimiento del funcionamiento de Hilos y su desempeño en comparativa de actividades secuenciales
 + Cierto grado del manejo de tareas por parte de Threads a través de OpenMP
 + Mayor comprensión del funcionamiento y desarrollo de programas en lenguaje C++
 + Entendimiento del comportamiento y utilización de la memoria física y virtual de un equipo computacional

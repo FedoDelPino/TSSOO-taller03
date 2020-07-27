@@ -150,7 +150,7 @@ int main(int argc, char** argv){
 	elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start);
 	auto totalTimePSumaOMP = elapsed.count();
 	
-	//================Consolidacion de resultados================
+	//===============Consolidacion de resultados===============
 	std::cout << "Suma En Serie:                     " <<SumaSerial << std::endl;
 	std::cout << "Suma Total en Paralelo:            " << SumaParalelo << std::endl;
 	std::cout << "Suma Total en Serie con OMP:       " << sumaSerialOMP << std::endl;
